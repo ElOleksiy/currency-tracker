@@ -12,8 +12,9 @@ body {
 }
 
 .container {
-  max-width: 25%;
+  max-width: 1000px;
   margin: 0 auto;
+  background-color: blueviolet;
 }
 
 .user-input {

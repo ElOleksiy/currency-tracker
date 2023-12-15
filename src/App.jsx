@@ -19,8 +19,12 @@ function App() {
           price: currencyData.USD,
         },
       ]);
-      console.log(tickers);
-    }, 3000);
+      const updatedTickers = tickers.map((ticker) => {
+        return { ...ticker, price: currencyData.USD };
+      });
+      console.log(updatedTickers);
+      setTickers(updatedTickers);
+    }, 5000);
 
     console.log(tickers);
     setInputValue("");

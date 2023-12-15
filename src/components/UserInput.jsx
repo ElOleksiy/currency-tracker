@@ -6,7 +6,7 @@ export default function UserInput({ inputValue, setInputValue, handleButton }) {
         required
         name="input"
         value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
+        onChange={(e) => setInputValue(e.target.value.toUpperCase())}
         type="text"
       />
       <button onClick={handleButton}>Add currency</button>

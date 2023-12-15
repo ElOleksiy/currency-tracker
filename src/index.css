@@ -21,7 +21,3 @@ body {
   display: flex;
   justify-content: center;
 }
-
-.user-input > button {
-  padding: 30px 50px;
-}

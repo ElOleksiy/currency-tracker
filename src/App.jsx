@@ -2,33 +2,26 @@ import { useState } from "react";
 import UserInput from "./components/UserInput";
 import Container from "./components/Container";
 import CurrencyCard from "./components/CurrencyCard";
+import { getCurrencyData } from "./api.js";
 
 function App() {
-  const API_KEY =
-    "9a2e01e570c0b693006d832c67ecc7a80ffbb3ed27cfd73218a1c37395c2584c";
-
   const [inputValue, setInputValue] = useState("");
   const [tickers, setTickers] = useState([]);
 
   function handleButton() {
-    fetch(
-      `https://min-api.cryptocompare.com/data/price?fsym=${inputValue}&tsyms=USD&${API_KEY}`
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        if (!(data["Response"] === "Error"))
-          setTickers((prevTickers) => [
-            ...prevTickers,
-            {
-              name: inputValue,
-              price: data["USD"],
-            },
-          ]);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
+    setInterval(async () => {
+      const currencyData = await getCurrencyData(inputValue);
+      console.log(currencyData);
+      setTickers((prevTickers) => [
+        ...prevTickers,
+        {
+          name: inputValue,
+          price: currencyData.USD,
+        },
+      ]);
+      console.log(tickers);
+    }, 3000);
+
     console.log(tickers);
     setInputValue("");
   }

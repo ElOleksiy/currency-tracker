@@ -38,21 +38,22 @@ function App() {
   }, []);
 
   function handleButton() {
-    getCurrencyData(inputValue)
-      .then((currencyData) => {
-        console.log("currency", currencyData);
-        setTickers((prevTickers) => [
-          ...prevTickers,
-          {
-            name: inputValue,
-            price: currencyData.USD,
-          },
-        ]);
-      })
-      .catch((error) => {
-        console.error("Error fetching data: ", error);
-      });
-
+    if (inputValue) {
+      getCurrencyData(inputValue)
+        .then((currencyData) => {
+          console.log("currency", currencyData);
+          setTickers((prevTickers) => [
+            ...prevTickers,
+            {
+              name: inputValue,
+              price: currencyData.USD,
+            },
+          ]);
+        })
+        .catch((error) => {
+          console.error("Error fetching data: ", error);
+        });
+    }
     setInputValue("");
   }
 

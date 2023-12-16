@@ -8,27 +8,35 @@ function App() {
   const [inputValue, setInputValue] = useState("");
   const [tickers, setTickers] = useState([]);
 
-  function handleButton() {
-    setInterval(async () => {
-      const currencyData = await getCurrencyData(inputValue);
-      setTickers((prevTickers) => [
-        ...prevTickers,
-        {
-          name: inputValue,
-          price: currencyData.USD,
-        },
-      ]);
-    }, 3000);
-
-    setInputValue("");
-  }
   useEffect(() => {
     localStorage.setItem("tickers", JSON.stringify(tickers));
   }, [tickers]);
   useEffect(() => {
     const items = JSON.parse(localStorage.getItem("tickers"));
-    if (items) setTickers(items);
+    console.log("setup");
+    if (items) {
+      setTickers(items);
+    }
   }, []);
+
+  function handleButton() {
+    getCurrencyData(inputValue)
+      .then((currencyData) => {
+        console.log("currency", currencyData);
+        setTickers((prevTickers) => [
+          ...prevTickers,
+          {
+            name: inputValue,
+            price: currencyData.USD,
+          },
+        ]);
+      })
+      .catch((error) => {
+        console.error("Error fetching data: ", error);
+      });
+
+    setInputValue("");
+  }
 
   return (
     <>

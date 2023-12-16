@@ -30,7 +30,6 @@ function App() {
       setTickers(items);
     }
   }, []);
-
   function handleButton() {
     if (inputValue && !tickers.find((ticker) => ticker.name === inputValue)) {
       setTickers((prevTickers) => [
@@ -40,8 +39,8 @@ function App() {
           price: null,
         },
       ]);
+      setInputValue("");
     }
-    setInputValue("");
   }
 
   function deleteCard(name) {
@@ -59,7 +58,6 @@ function App() {
   function validTickers() {
     return Boolean(tickers.length);
   }
-
   return (
     <div className="container mx-auto flex flex-col items-center bg-gray-100 p-4">
       <div className="container">

@@ -7,7 +7,7 @@ export default function UserInput({ inputValue, setInputValue, handleButton }) {
             htmlFor="wallet"
             className="block text-sm font-medium text-gray-700"
           >
-            Тикер
+            Enter currency name:
           </label>
           <div className="mt-1 relative rounded-md shadow-md">
             <input

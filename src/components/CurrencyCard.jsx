@@ -25,7 +25,7 @@ export default function CurrencyCard({ currencyName, price, deleteCard }) {
             clipRule="evenodd"
           ></path>
         </svg>
-        Удалить
+        Delete
       </button>
     </div>
   );

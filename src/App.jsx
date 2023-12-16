@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import UserInput from "./components/UserInput";
-import Container from "./components/Container";
 import CurrencyCard from "./components/CurrencyCard";
 import { getCurrencyData } from "./api.js";
 
@@ -34,20 +33,13 @@ function App() {
 
   function handleButton() {
     if (inputValue && !tickers.find((ticker) => ticker.name === inputValue)) {
-      getCurrencyData(inputValue)
-        .then((currencyData) => {
-          console.log("currency", currencyData);
-          setTickers((prevTickers) => [
-            ...prevTickers,
-            {
-              name: inputValue,
-              price: currencyData.USD + "$",
-            },
-          ]);
-        })
-        .catch((error) => {
-          console.error("Error fetching data: ", error);
-        });
+      setTickers((prevTickers) => [
+        ...prevTickers,
+        {
+          name: inputValue,
+          price: null,
+        },
+      ]);
     }
     setInputValue("");
   }
@@ -64,9 +56,9 @@ function App() {
     localStorage.setItem("tickers", JSON.stringify(updatedTickers));
   }
 
-  const validTickers = () => {
-    return tickers.length;
-  };
+  function validTickers() {
+    return Boolean(tickers.length);
+  }
 
   return (
     <div className="container mx-auto flex flex-col items-center bg-gray-100 p-4">
@@ -77,7 +69,7 @@ function App() {
           inputValue={inputValue}
         />
 
-        {validTickers && (
+        {validTickers() && (
           <hr className="w-full border-t border-gray-600 my-4" />
         )}
         <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
@@ -92,7 +84,9 @@ function App() {
             );
           })}
         </dl>
-        <hr className="w-full border-t border-gray-600 my-4" />
+        {validTickers() && (
+          <hr className="w-full border-t border-gray-600 my-4" />
+        )}
       </div>
     </div>
   );

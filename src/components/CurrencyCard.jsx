@@ -1,9 +1,9 @@
-export default function CurrencyCard({ currencyName, price }) {
+export default function CurrencyCard({ currencyName, price, deleteCard }) {
   return (
     <>
       <h4>{currencyName}</h4>
       <p>{price}</p>
-      <button>Delete</button>
+      <button onClick={() => deleteCard(currencyName)}>Delete</button>
     </>
   );
 }

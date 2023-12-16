@@ -21,6 +21,7 @@ function App() {
             price: newData[index].USD,
           }));
           setTickers(updatedTickers);
+          localStorage.setItem("tickers", JSON.stringify(updatedTickers));
         } catch (error) {
           console.error("Error fetching data: ", error);
         }
@@ -57,6 +58,18 @@ function App() {
     setInputValue("");
   }
 
+  function deleteCard(name) {
+    setTickers((prevTickers) =>
+      prevTickers.filter((tickers) => tickers.name !== name)
+    );
+
+    const storedTickers = JSON.parse(localStorage.getItem("tickers"));
+    const updatedTickers = storedTickers.filter(
+      (ticker) => ticker.name !== name
+    );
+    localStorage.setItem("tickers", JSON.stringify(updatedTickers));
+  }
+
   return (
     <>
       <Container>
@@ -71,6 +84,7 @@ function App() {
               key={ticker.name}
               currencyName={ticker.name}
               price={ticker.price}
+              deleteCard={() => deleteCard(ticker.name)}
             />
           );
         })}

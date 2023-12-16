@@ -11,20 +11,14 @@ function App() {
   useEffect(() => {
     const interval = setInterval(async () => {
       if (tickers.length > 0) {
-        try {
-          const promises = tickers.map((ticker) =>
-            getCurrencyData(ticker.name)
-          );
-          const newData = await Promise.all(promises);
-          const updatedTickers = tickers.map((ticker, index) => ({
-            ...ticker,
-            price: newData[index].USD,
-          }));
-          setTickers(updatedTickers);
-          localStorage.setItem("tickers", JSON.stringify(updatedTickers));
-        } catch (error) {
-          console.error("Error fetching data: ", error);
-        }
+        const promises = tickers.map((ticker) => getCurrencyData(ticker.name));
+        const newData = await Promise.all(promises);
+        const updatedTickers = tickers.map((ticker, index) => ({
+          ...ticker,
+          price: newData[index].USD,
+        }));
+        setTickers(updatedTickers);
+        localStorage.setItem("tickers", JSON.stringify(updatedTickers));
       }
     }, 3000);
 

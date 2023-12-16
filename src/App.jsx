@@ -9,7 +9,25 @@ function App() {
   const [tickers, setTickers] = useState([]);
 
   useEffect(() => {
-    localStorage.setItem("tickers", JSON.stringify(tickers));
+    const interval = setInterval(async () => {
+      if (tickers.length > 0) {
+        try {
+          const promises = tickers.map((ticker) =>
+            getCurrencyData(ticker.name)
+          );
+          const newData = await Promise.all(promises);
+          const updatedTickers = tickers.map((ticker, index) => ({
+            ...ticker,
+            price: newData[index].USD,
+          }));
+          setTickers(updatedTickers);
+        } catch (error) {
+          console.error("Error fetching data: ", error);
+        }
+      }
+    }, 3000);
+
+    return () => clearInterval(interval);
   }, [tickers]);
   useEffect(() => {
     const items = JSON.parse(localStorage.getItem("tickers"));

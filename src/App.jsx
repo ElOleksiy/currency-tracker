@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import UserInput from "./components/UserInput";
 import Container from "./components/Container";
 import CurrencyCard from "./components/CurrencyCard";
@@ -11,7 +11,6 @@ function App() {
   function handleButton() {
     setInterval(async () => {
       const currencyData = await getCurrencyData(inputValue);
-      console.log(currencyData);
       setTickers((prevTickers) => [
         ...prevTickers,
         {
@@ -19,16 +18,17 @@ function App() {
           price: currencyData.USD,
         },
       ]);
-      const updatedTickers = tickers.map((ticker) => {
-        return { ...ticker, price: currencyData.USD };
-      });
-      console.log(updatedTickers);
-      setTickers(updatedTickers);
-    }, 5000);
+    }, 3000);
 
-    console.log(tickers);
     setInputValue("");
   }
+  useEffect(() => {
+    localStorage.setItem("tickers", JSON.stringify(tickers));
+  }, [tickers]);
+  useEffect(() => {
+    const items = JSON.parse(localStorage.getItem("tickers"));
+    if (items) setTickers(items);
+  }, []);
 
   return (
     <>

@@ -33,7 +33,7 @@ function App() {
   }, []);
 
   function handleButton() {
-    if (inputValue) {
+    if (inputValue && !tickers.find((ticker) => ticker.name === inputValue)) {
       getCurrencyData(inputValue)
         .then((currencyData) => {
           console.log("currency", currencyData);
@@ -41,7 +41,7 @@ function App() {
             ...prevTickers,
             {
               name: inputValue,
-              price: currencyData.USD,
+              price: currencyData.USD + "$",
             },
           ]);
         })

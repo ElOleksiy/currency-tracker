@@ -1,11 +1,13 @@
-import { useState, useEffect } from "react";
 import UserInput from "./components/UserInput";
 import CurrencyCard from "./components/CurrencyCard";
-import { getCurrencyData } from "./api.js";
+import Loading from "./components/Loading.jsx";
+import { useState, useEffect } from "react";
+import { getCurrencyData, getAllCurencyList } from "./api.js";
 
 function App() {
   const [inputValue, setInputValue] = useState("");
   const [tickers, setTickers] = useState([]);
+  const [currencyListIsLoading, setCurrencyListIsLoading] = useState(true);
 
   useEffect(() => {
     const interval = setInterval(async () => {
@@ -23,7 +25,14 @@ function App() {
 
     return () => clearInterval(interval);
   }, [tickers]);
+
   useEffect(() => {
+    getAllCurencyList()
+      .then((data) => console.log(data))
+      .then(() => {
+        setCurrencyListIsLoading(false);
+      });
+
     const items = JSON.parse(localStorage.getItem("tickers"));
     console.log("setup");
     if (items) {
@@ -60,6 +69,7 @@ function App() {
   }
   return (
     <div className="container mx-auto flex flex-col items-center bg-gray-100 p-4">
+      {currencyListIsLoading && <Loading />}
       <div className="container">
         <UserInput
           setInputValue={setInputValue}

@@ -4,3 +4,8 @@ export const getCurrencyData = (inputValue) =>
   fetch(
     `https://min-api.cryptocompare.com/data/price?fsym=${inputValue}&tsyms=USD&${API_KEY}`
   ).then((res) => res.json());
+
+export const getAllCurencyList = () =>
+  fetch(`https://min-api.cryptocompare.com/data/all/coinlist`).then((res) =>
+    res.json()
+  );

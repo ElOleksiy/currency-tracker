@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import FuzzySearch from "./FuzzySearch";
 
 export default function UserInput({
@@ -28,7 +27,9 @@ export default function UserInput({
               onChange={(e) => setInputValue(e.target.value.toUpperCase())}
             />
           </div>
-          <FuzzySearch fuzzySearchResult={fuzzySearchResult} />
+          {Boolean(fuzzySearchResult.length) && (
+            <FuzzySearch fuzzySearchResult={fuzzySearchResult} />
+          )}
         </div>
       </div>
       <button

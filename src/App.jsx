@@ -102,6 +102,7 @@ function App() {
           handleButton={handleButton}
           inputValue={inputValue}
           fuzzySearchResult={fuszzySearchResult}
+          setTickers={setTickers}
         />
 
         {validTickers() && (

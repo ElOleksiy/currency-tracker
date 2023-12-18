@@ -5,6 +5,7 @@ export default function UserInput({
   setInputValue,
   handleButton,
   fuzzySearchResult,
+  setTickers,
 }) {
   return (
     <section>
@@ -28,7 +29,11 @@ export default function UserInput({
             />
           </div>
           {Boolean(fuzzySearchResult.length) && (
-            <FuzzySearch fuzzySearchResult={fuzzySearchResult} />
+            <FuzzySearch
+              setTickers={setTickers}
+              fuzzySearchResult={fuzzySearchResult}
+              setInputValue={setInputValue}
+            />
           )}
         </div>
       </div>

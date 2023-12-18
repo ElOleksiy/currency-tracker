@@ -20,7 +20,7 @@ function App() {
         const newData = await Promise.all(promises);
         const updatedTickers = tickers.map((ticker, index) => ({
           ...ticker,
-          price: newData[index].USD || "No trade",
+          price: newData[index].USD || "Not tradeble",
         }));
         setTickers(updatedTickers);
         localStorage.setItem("tickers", JSON.stringify(updatedTickers));

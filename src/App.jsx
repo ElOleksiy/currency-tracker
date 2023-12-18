@@ -106,7 +106,7 @@ function App() {
           inputValue={inputValue}
           fuzzySearchResult={fuszzySearchResult}
           setTickers={setTickers}
-          tickers={tickers}}
+          tickers={tickers}
         />
 
         {validTickers() && (

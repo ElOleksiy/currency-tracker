@@ -3,11 +3,16 @@ import CurrencyCard from "./components/CurrencyCard";
 import Loading from "./components/Loading.jsx";
 import { useState, useEffect } from "react";
 import { getCurrencyData, getAllCurencyList } from "./api.js";
+import Fuse from "fuse.js";
+
+const allCurencyList = getAllCurencyList();
+console.log(allCurencyList);
 
 function App() {
   const [inputValue, setInputValue] = useState("");
   const [tickers, setTickers] = useState([]);
   const [currencyListIsLoading, setCurrencyListIsLoading] = useState(true);
+  const [fuszzySearchResult, setFuzzySearchResult] = useState([]);
 
   useEffect(() => {
     const interval = setInterval(async () => {
@@ -25,13 +30,10 @@ function App() {
 
     return () => clearInterval(interval);
   }, [tickers]);
-
   useEffect(() => {
-    getAllCurencyList()
-      .then((data) => console.log(data))
-      .then(() => {
-        setCurrencyListIsLoading(false);
-      });
+    allCurencyList.then(() => {
+      setCurrencyListIsLoading(false);
+    });
 
     const items = JSON.parse(localStorage.getItem("tickers"));
     console.log("setup");
@@ -39,6 +41,29 @@ function App() {
       setTickers(items);
     }
   }, []);
+
+  useEffect(() => {
+    allCurencyList.then((data) => {
+      let structuredData = [];
+
+      for (let key in data.Data)
+        structuredData.push({
+          name: key,
+        });
+
+      const fuse = new Fuse(structuredData, {
+        keys: ["name"],
+        includeScore: true,
+      });
+      const result = fuse.search(inputValue);
+      const filteredResult = result
+        .sort((a, b) => a.score - b.score)
+        .slice(1, 5);
+      console.log(filteredResult);
+      setFuzzySearchResult(filteredResult.map((result) => result.item));
+    });
+  }, [inputValue]);
+
   function handleButton() {
     if (inputValue && !tickers.find((ticker) => ticker.name === inputValue)) {
       setTickers((prevTickers) => [
@@ -67,6 +92,7 @@ function App() {
   function validTickers() {
     return Boolean(tickers.length);
   }
+
   return (
     <div className="container mx-auto flex flex-col items-center bg-gray-100 p-4">
       {currencyListIsLoading && <Loading />}
@@ -75,6 +101,7 @@ function App() {
           setInputValue={setInputValue}
           handleButton={handleButton}
           inputValue={inputValue}
+          fuzzySearchResult={fuszzySearchResult}
         />
 
         {validTickers() && (

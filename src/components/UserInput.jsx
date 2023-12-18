@@ -1,4 +1,12 @@
-export default function UserInput({ inputValue, setInputValue, handleButton }) {
+import { useEffect } from "react";
+import FuzzySearch from "./FuzzySearch";
+
+export default function UserInput({
+  inputValue,
+  setInputValue,
+  handleButton,
+  fuzzySearchResult,
+}) {
   return (
     <section>
       <div className="flex">
@@ -20,23 +28,7 @@ export default function UserInput({ inputValue, setInputValue, handleButton }) {
               onChange={(e) => setInputValue(e.target.value.toUpperCase())}
             />
           </div>
-          <div className="flex bg-white shadow-md p-1 rounded-md shadow-md flex-wrap">
-            <span className="inline-flex items-center px-2 m-1 rounded-md text-xs font-medium bg-gray-300 text-gray-800 cursor-pointer">
-              BTC
-            </span>
-            <span className="inline-flex items-center px-2 m-1 rounded-md text-xs font-medium bg-gray-300 text-gray-800 cursor-pointer">
-              DOGE
-            </span>
-            <span className="inline-flex items-center px-2 m-1 rounded-md text-xs font-medium bg-gray-300 text-gray-800 cursor-pointer">
-              BCH
-            </span>
-            <span className="inline-flex items-center px-2 m-1 rounded-md text-xs font-medium bg-gray-300 text-gray-800 cursor-pointer">
-              CHD
-            </span>
-          </div>
-          <div className="text-sm text-red-600">
-            This currency is already add
-          </div>
+          <FuzzySearch fuzzySearchResult={fuzzySearchResult} />
         </div>
       </div>
       <button

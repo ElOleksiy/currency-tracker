@@ -6,8 +6,7 @@ import { getCurrencyData, getAllCurencyList } from "./api.js";
 import Fuse from "fuse.js";
 
 const allCurencyList = getAllCurencyList();
-console.log(allCurencyList);
-
+allCurencyList.then((data) => console.log(data));
 function App() {
   const [inputValue, setInputValue] = useState("");
   const [tickers, setTickers] = useState([]);
@@ -21,7 +20,7 @@ function App() {
         const newData = await Promise.all(promises);
         const updatedTickers = tickers.map((ticker, index) => ({
           ...ticker,
-          price: newData[index].USD,
+          price: newData[index].USD || "No trade",
         }));
         setTickers(updatedTickers);
         localStorage.setItem("tickers", JSON.stringify(updatedTickers));
@@ -46,10 +45,12 @@ function App() {
     allCurencyList.then((data) => {
       let structuredData = [];
 
-      for (let key in data.Data)
+      for (let key in data.Data) {
         structuredData.push({
           name: key,
+          isTrading: data.Data[key].IsTrading,
         });
+      }
 
       const fuse = new Fuse(structuredData, {
         keys: ["name"],
@@ -76,7 +77,9 @@ function App() {
       setInputValue("");
     }
   }
-
+  function checkIsCurrencyAdd() {
+    !tickers.find((ticker) => ticker.name === inputValue);
+  }
   function deleteCard(name) {
     setTickers((prevTickers) =>
       prevTickers.filter((tickers) => tickers.name !== name)
@@ -103,6 +106,7 @@ function App() {
           inputValue={inputValue}
           fuzzySearchResult={fuszzySearchResult}
           setTickers={setTickers}
+          checkIsCurrencyAdd={checkIsCurrencyAdd}
         />
 
         {validTickers() && (

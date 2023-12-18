@@ -64,7 +64,7 @@ function App() {
     });
   }, [inputValue]);
 
-  function handleButton() {
+  function addTicker() {
     if (inputValue && !tickers.find((ticker) => ticker.name === inputValue)) {
       setTickers((prevTickers) => [
         ...prevTickers,
@@ -99,7 +99,7 @@ function App() {
       <div className="container">
         <UserInput
           setInputValue={setInputValue}
-          handleButton={handleButton}
+          handleButton={addTicker}
           inputValue={inputValue}
           fuzzySearchResult={fuszzySearchResult}
           setTickers={setTickers}

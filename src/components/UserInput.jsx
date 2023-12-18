@@ -6,6 +6,7 @@ export default function UserInput({
   handleButton,
   fuzzySearchResult,
   setTickers,
+  tickers,
 }) {
   return (
     <section>
@@ -34,6 +35,11 @@ export default function UserInput({
               fuzzySearchResult={fuzzySearchResult}
               setInputValue={setInputValue}
             />
+          )}
+          {tickers.find((ticker) => ticker.name === inputValue) && (
+            <div className="text-sm text-red-600">
+              This currency is already added
+            </div>
           )}
         </div>
       </div>

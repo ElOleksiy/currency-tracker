@@ -2,15 +2,19 @@ export default function FuzzySearch({
   fuzzySearchResult,
   setTickers,
   setInputValue,
+  tickers,
+  inputValue,
 }) {
   function addTicker(ticker) {
-    setTickers((prevTickers) => [
-      ...prevTickers,
-      {
-        name: ticker.name,
-        price: null,
-      },
-    ]);
+    if (!tickers.find((item) => item.name === ticker.name)) {
+      setTickers((prevTickers) => [
+        ...prevTickers,
+        {
+          name: ticker.name,
+          price: null,
+        },
+      ]);
+    }
     setInputValue("");
   }
   return (

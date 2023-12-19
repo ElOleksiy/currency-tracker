@@ -34,6 +34,8 @@ export default function UserInput({
               setTickers={setTickers}
               fuzzySearchResult={fuzzySearchResult}
               setInputValue={setInputValue}
+              inputValue={inputValue}
+              tickers={tickers}
             />
           )}
           {tickers.find((ticker) => ticker.name === inputValue) && (

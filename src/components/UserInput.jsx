@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import FuzzySearch from "./FuzzySearch";
 
 export default function UserInput({
@@ -8,6 +9,13 @@ export default function UserInput({
   setTickers,
   tickers,
 }) {
+  const [currencyIsAlreadyAdd, setCurrencyIsAlreadyAdd] = useState(false);
+
+  useEffect(() => {
+    if (currencyIsAlreadyAdd) {
+      setCurrencyIsAlreadyAdd(false);
+    }
+  }, [inputValue]);
   return (
     <section>
       <div className="flex">
@@ -34,11 +42,12 @@ export default function UserInput({
               setTickers={setTickers}
               fuzzySearchResult={fuzzySearchResult}
               setInputValue={setInputValue}
-              inputValue={inputValue}
               tickers={tickers}
+              setCurrencyIsAlreadyAdd={setCurrencyIsAlreadyAdd}
             />
           )}
-          {tickers.find((ticker) => ticker.name === inputValue) && (
+          {(tickers.find((ticker) => ticker.name === inputValue) ||
+            currencyIsAlreadyAdd) && (
             <div className="text-sm text-red-600">
               This currency is already added
             </div>

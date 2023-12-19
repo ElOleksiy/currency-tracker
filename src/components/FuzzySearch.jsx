@@ -3,7 +3,8 @@ export default function FuzzySearch({
   setTickers,
   setInputValue,
   tickers,
-  inputValue,
+
+  setCurrencyIsAlreadyAdd,
 }) {
   function addTicker(ticker) {
     if (!tickers.find((item) => item.name === ticker.name)) {
@@ -14,9 +15,12 @@ export default function FuzzySearch({
           price: null,
         },
       ]);
+      setInputValue("");
+    } else {
+      setCurrencyIsAlreadyAdd(true);
     }
-    setInputValue("");
   }
+
   return (
     <div className="flex bg-white shadow-md p-1 rounded-md shadow-md flex-wrap">
       {fuzzySearchResult.map((item) => {

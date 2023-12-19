@@ -35,7 +35,6 @@ function App() {
     });
 
     const items = JSON.parse(localStorage.getItem("tickers"));
-    console.log("setup");
     if (items) {
       setTickers(items);
     }
@@ -60,7 +59,7 @@ function App() {
       const filteredResult = result
         .sort((a, b) => a.score - b.score)
         .slice(1, 5);
-      console.log(filteredResult);
+
       setFuzzySearchResult(filteredResult.map((result) => result.item));
     });
   }, [inputValue]);
@@ -76,9 +75,6 @@ function App() {
       ]);
       setInputValue("");
     }
-  }
-  function checkIsCurrencyAdd() {
-    !tickers.find((ticker) => ticker.name === inputValue);
   }
   function deleteCard(name) {
     setTickers((prevTickers) =>

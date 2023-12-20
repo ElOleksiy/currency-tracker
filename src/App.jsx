@@ -12,6 +12,8 @@ function App() {
   const [tickers, setTickers] = useState([]);
   const [currencyListIsLoading, setCurrencyListIsLoading] = useState(true);
   const [fuszzySearchResult, setFuzzySearchResult] = useState([]);
+  const [graph, setGraph] = useState([]);
+  const [selectedTicker, setSelectedTicker] = useState(null);
 
   useEffect(() => {
     const interval = setInterval(async () => {
@@ -22,6 +24,8 @@ function App() {
           ...ticker,
           price: newData[index].USD || "Not tradeble",
         }));
+        console.log(updatedTickers[1].price);
+        console.log(selectedTicker);
         setTickers(updatedTickers);
         localStorage.setItem("tickers", JSON.stringify(updatedTickers));
       }
@@ -80,7 +84,6 @@ function App() {
     setTickers((prevTickers) =>
       prevTickers.filter((tickers) => tickers.name !== name)
     );
-
     const storedTickers = JSON.parse(localStorage.getItem("tickers"));
     const updatedTickers = storedTickers.filter(
       (ticker) => ticker.name !== name
@@ -116,6 +119,9 @@ function App() {
                 currencyName={ticker.name}
                 price={ticker.price}
                 deleteCard={() => deleteCard(ticker.name)}
+                setSelectedTicker={setSelectedTicker}
+                ticker={ticker}
+                selectedTicker={selectedTicker}
               />
             );
           })}

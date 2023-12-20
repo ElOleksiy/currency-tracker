@@ -1,6 +1,22 @@
-export default function CurrencyCard({ currencyName, price, deleteCard }) {
+import { useState } from "react";
+
+export default function CurrencyCard({
+  currencyName,
+  price,
+  deleteCard,
+  setSelectedTicker,
+  ticker,
+  selectedTicker,
+}) {
   return (
-    <div className="bg-white overflow-hidden shadow rounded-lg border-purple-800 border-solid cursor-pointer">
+    <div
+      onClick={() => setSelectedTicker(ticker)}
+      className={
+        selectedTicker === ticker
+          ? "bg-white overflow-hidden shadow rounded-lg border-purple-800 border-solid cursor-pointer border-4"
+          : "bg-white overflow-hidden shadow rounded-lg border-purple-800 border-solid cursor-pointer"
+      }
+    >
       <div className="px-4 py-5 sm:p-6 text-center">
         <dt className="text-sm font-medium text-gray-500 truncate">
           {currencyName} - USD

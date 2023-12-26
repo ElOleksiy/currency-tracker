@@ -24,8 +24,6 @@ function App() {
           ...ticker,
           price: newData[index].USD || "Not tradeble",
         }));
-        console.log(updatedTickers[1].price);
-        console.log(selectedTicker);
         setTickers(updatedTickers);
         localStorage.setItem("tickers", JSON.stringify(updatedTickers));
       }

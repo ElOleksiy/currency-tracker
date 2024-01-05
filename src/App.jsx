@@ -2,7 +2,11 @@ import UserInput from "./components/UserInput";
 import CurrencyCard from "./components/CurrencyCard";
 import Loading from "./components/Loading.jsx";
 import { useState, useEffect } from "react";
-import { getCurrencyData, getAllCurencyList } from "./api.js";
+import {
+  subscribeToTicker,
+  unsubscribeFromTicker,
+  getAllCurencyList,
+} from "./api.js";
 import Fuse from "fuse.js";
 
 const allCurencyList = getAllCurencyList();
@@ -15,22 +19,6 @@ function App() {
   const [graph, setGraph] = useState([]);
   const [selectedTicker, setSelectedTicker] = useState(null);
 
-  useEffect(() => {
-    const interval = setInterval(async () => {
-      if (tickers.length > 0) {
-        const promises = tickers.map((ticker) => getCurrencyData(ticker.name));
-        const newData = await Promise.all(promises);
-        const updatedTickers = tickers.map((ticker, index) => ({
-          ...ticker,
-          price: newData[index].USD || "Not tradeble",
-        }));
-        setTickers(updatedTickers);
-        localStorage.setItem("tickers", JSON.stringify(updatedTickers));
-      }
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, [tickers]);
   useEffect(() => {
     allCurencyList.then(() => {
       setCurrencyListIsLoading(false);
@@ -66,15 +54,36 @@ function App() {
     });
   }, [inputValue]);
 
+  function updateTicker(tickerName, price) {
+    setTickers((prevTickers) =>
+      prevTickers.map((ticker) => {
+        if (ticker.name === tickerName) {
+          const updatedTicker = {
+            ...ticker,
+            price: price,
+          };
+
+          if (selectedTicker && ticker.name === selectedTicker.name) {
+            setGraph((prevGraph) => [...prevGraph, price]);
+          }
+
+          return updatedTicker;
+        }
+        return ticker;
+      })
+    );
+  }
+
   function addTicker() {
     if (inputValue && !tickers.find((ticker) => ticker.name === inputValue)) {
-      setTickers((prevTickers) => [
-        ...prevTickers,
-        {
-          name: inputValue,
-          price: null,
-        },
-      ]);
+      const currentTicker = {
+        name: inputValue,
+        price: "-",
+      };
+      setTickers((prevTickers) => [...prevTickers, currentTicker]);
+      subscribeToTicker(currentTicker.name, (newPrice) =>
+        updateTicker(currentTicker.name, newPrice)
+      );
       setInputValue("");
     }
   }
@@ -82,6 +91,7 @@ function App() {
     setTickers((prevTickers) =>
       prevTickers.filter((tickers) => tickers.name !== name)
     );
+    unsubscribeFromTicker(name);
     const storedTickers = JSON.parse(localStorage.getItem("tickers"));
     const updatedTickers = storedTickers.filter(
       (ticker) => ticker.name !== name

@@ -12,7 +12,10 @@ import Fuse from "fuse.js";
 const allCurencyList = getAllCurencyList();
 
 const formatPrice = (price) => {
-  return price;
+  if (price === "-") {
+    return price;
+  }
+  return price > 1 ? price.toFixed(2) : price.toPrecision(3);
 };
 
 function App() {
@@ -72,7 +75,7 @@ function App() {
         if (ticker.name === tickerName) {
           const updatedTicker = {
             ...ticker,
-            price: price,
+            price: formatPrice(price),
           };
 
           return updatedTicker;

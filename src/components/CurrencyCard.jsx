@@ -21,7 +21,9 @@ export default function CurrencyCard({
         <dt className="text-sm font-medium text-gray-500 truncate">
           {currencyName} - USD
         </dt>
-        <dd className="mt-1 text-3xl font-semibold text-gray-900">{price}</dd>
+        <dd className="mt-1 text-3xl font-semibold text-gray-900">
+          {price || "-"}
+        </dd>
       </div>
       <div className="w-full border-t border-gray-200"></div>
       <button

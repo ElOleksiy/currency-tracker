@@ -10,26 +10,38 @@ import {
 import Fuse from "fuse.js";
 
 const allCurencyList = getAllCurencyList();
-allCurencyList.then((data) => console.log(data));
+
+const formatPrice = (price) => {
+  return price;
+};
+
 function App() {
   const [inputValue, setInputValue] = useState("");
   const [tickers, setTickers] = useState([]);
   const [currencyListIsLoading, setCurrencyListIsLoading] = useState(true);
   const [fuszzySearchResult, setFuzzySearchResult] = useState([]);
-  const [graph, setGraph] = useState([]);
-  const [selectedTicker, setSelectedTicker] = useState(null);
 
   useEffect(() => {
     allCurencyList.then(() => {
       setCurrencyListIsLoading(false);
     });
+  }, []);
 
+  useEffect(() => {
     const items = JSON.parse(localStorage.getItem("tickers"));
     if (items) {
       setTickers(items);
     }
   }, []);
 
+  useEffect(() => {
+    localStorage.setItem("tickers", JSON.stringify(tickers));
+    tickers.forEach((item) => {
+      subscribeToTicker(item.name, (newPrice) =>
+        updateTicker(item.name, newPrice)
+      );
+    });
+  }, [tickers]);
   useEffect(() => {
     allCurencyList.then((data) => {
       let structuredData = [];
@@ -63,10 +75,6 @@ function App() {
             price: price,
           };
 
-          if (selectedTicker && ticker.name === selectedTicker.name) {
-            setGraph((prevGraph) => [...prevGraph, price]);
-          }
-
           return updatedTicker;
         }
         return ticker;
@@ -81,9 +89,7 @@ function App() {
         price: "-",
       };
       setTickers((prevTickers) => [...prevTickers, currentTicker]);
-      subscribeToTicker(currentTicker.name, (newPrice) =>
-        updateTicker(currentTicker.name, newPrice)
-      );
+
       setInputValue("");
     }
   }
@@ -93,16 +99,13 @@ function App() {
     );
     unsubscribeFromTicker(name);
     const storedTickers = JSON.parse(localStorage.getItem("tickers"));
-    const updatedTickers = storedTickers.filter(
-      (ticker) => ticker.name !== name
-    );
-    localStorage.setItem("tickers", JSON.stringify(updatedTickers));
+    setTickers(storedTickers.filter((ticker) => ticker.name !== name));
   }
 
   function validTickers() {
     return Boolean(tickers.length);
   }
-
+  console.log(tickers);
   return (
     <div className="container mx-auto flex flex-col items-center bg-gray-100 p-4">
       {currencyListIsLoading && <Loading />}
@@ -127,9 +130,7 @@ function App() {
                 currencyName={ticker.name}
                 price={ticker.price}
                 deleteCard={() => deleteCard(ticker.name)}
-                setSelectedTicker={setSelectedTicker}
                 ticker={ticker}
-                selectedTicker={selectedTicker}
               />
             );
           })}

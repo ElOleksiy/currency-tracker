@@ -29,6 +29,17 @@ function App() {
     if (items) {
       setTickers(items);
     }
+    window.addEventListener("load", () => {
+      const subscribers = JSON.parse(localStorage.getItem("tickers"));
+      console.log(subscribers);
+      if (subscribers) {
+        subscribers.forEach((item) => {
+          subscribeToTicker(item.name, (newPrice) =>
+            updateTicker(item.name, newPrice)
+          );
+        });
+      }
+    });
   }, []);
 
   useEffect(() => {
@@ -39,18 +50,6 @@ function App() {
       );
     });
   }, [tickers]);
-
-  window.addEventListener("load", () => {
-    const subscribers = JSON.parse(localStorage.getItem("tickers"));
-    console.log(subscribers);
-    if (subscribers) {
-      subscribers.forEach((item) => {
-        subscribeToTicker(item.name, (newPrice) =>
-          updateTicker(item.name, newPrice)
-        );
-      });
-    }
-  });
 
   useEffect(() => {
     allCurencyList.then((data) => {

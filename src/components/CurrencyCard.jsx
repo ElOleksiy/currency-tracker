@@ -1,20 +1,13 @@
-import { useState } from "react";
-
 export default function CurrencyCard({
   currencyName,
   price,
   deleteCard,
-  setSelectedTicker,
   ticker,
-  selectedTicker,
 }) {
   return (
     <div
-      onClick={() => setSelectedTicker(ticker)}
       className={
-        selectedTicker === ticker
-          ? "bg-white overflow-hidden shadow rounded-lg border-purple-800 border-solid cursor-pointer border-4"
-          : "bg-white overflow-hidden shadow rounded-lg border-purple-800 border-solid cursor-pointer"
+        "bg-white overflow-hidden shadow rounded-lg border-purple-800 border-solid cursor-pointer"
       }
     >
       <div className="px-4 py-5 sm:p-6 text-center">

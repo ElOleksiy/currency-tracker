@@ -8,15 +8,9 @@ import {
   getAllCurencyList,
 } from "./api.js";
 import Fuse from "fuse.js";
+import { formatPrice } from "./utils/utils.js";
 
 const allCurencyList = getAllCurencyList();
-
-const formatPrice = (price) => {
-  if (price === "-") {
-    return price;
-  }
-  return price > 1 ? price.toFixed(2) : price.toPrecision(3);
-};
 
 function App() {
   const [inputValue, setInputValue] = useState("");
@@ -45,6 +39,19 @@ function App() {
       );
     });
   }, [tickers]);
+
+  window.addEventListener("load", () => {
+    const subscribers = JSON.parse(localStorage.getItem("tickers"));
+    console.log(subscribers);
+    if (subscribers) {
+      subscribers.forEach((item) => {
+        subscribeToTicker(item.name, (newPrice) =>
+          updateTicker(item.name, newPrice)
+        );
+      });
+    }
+  });
+
   useEffect(() => {
     allCurencyList.then((data) => {
       let structuredData = [];
@@ -108,7 +115,7 @@ function App() {
   function validTickers() {
     return Boolean(tickers.length);
   }
-  console.log(tickers);
+
   return (
     <div className="container mx-auto flex flex-col items-center bg-gray-100 p-4">
       {currencyListIsLoading && <Loading />}

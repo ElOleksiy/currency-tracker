@@ -22,9 +22,6 @@ function App() {
     allCurencyList.then(() => {
       setCurrencyListIsLoading(false);
     });
-  }, []);
-
-  useEffect(() => {
     const items = JSON.parse(localStorage.getItem("tickers"));
     if (items) {
       setTickers(items);
